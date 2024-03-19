@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 * {
   padding: 0;
   margin: 0;
@@ -20,7 +23,7 @@ body {
   width: 50%;
   margin: auto;
   background-color: #444;
-  padding: 40px 30px 70px;
+  padding: 40px 30px 40px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -29,6 +32,7 @@ body {
   display: flex;
   justify-content: space-between;
   margin-bottom: 40px;
+  background-color: #d6d6d6;
 }
 
 .input-box {
@@ -45,11 +49,12 @@ body {
 .list-container li {
   list-style: none;
   font-size: 17px;
-  padding: 12px 8px 12px 40px;
+  padding: 12px 8px 12px 20px;
   user-select: none;
   position: relative;
   background-color: #333;
-  box-shadow: 0 0 10px rgb(12 12 12 / 50%);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  margin-bottom: 15px;
 }
 .button {
   width: 20%;
@@ -62,6 +67,10 @@ body {
 
 .button:hover {
   background-color: #0056b3;
+}
+
+.button:active {
+  transform: scale(1.05);
 }
 
 .close {
@@ -120,4 +129,59 @@ body {
 
 .edit-input.hidden {
   display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    width: 100%;
+    padding: 30px 20px 30px;
+  }
+
+  .input-container {
+    margin-bottom: 20px;
+  }
+
+  .input-box {
+    width: 100%;
+  }
+
+  .button {
+    width: 40%;
+  }
+  .list-container li {
+    list-style: none;
+    font-size: 17px;
+    padding: 12px 8px 12px 10px;
+    user-select: none;
+    position: relative;
+    background-color: #333;
+    /* box-shadow: 0 0 10px rgb(12 12 12 / 50%); */
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    margin-bottom: 15px;
+  }
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.input-box,
+.button,
+.list-container li {
+  font-family: 'Roboto', sans-serif;
+}
+
+.input-box,
+.button {
+  font-size: 18px;
+}
+
+.button {
+  font-weight: 700;
+}
+
+.button:hover,
+.close:hover,
+.edit:hover {
+  filter: brightness(90%);
 }
