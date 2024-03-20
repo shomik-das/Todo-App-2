@@ -14,69 +14,52 @@ async function fetchTasks() {
 }
 
 function renderTasks(tasks){
-  listContainer.innerHTML = " ";
+  listContainer.innerHTML = ""; // Clear previous content
   tasks.forEach(task =>{
+    // Create a div for each task
+    const taskDiv = document.createElement("div");
+    taskDiv.classList.add("task-div");
+
+    // Create an li element for the task text
     const listItem = document.createElement('li');
     listItem.textContent = task.title;
     listItem.dataset.id = task._id;
     if(task.status === '1'){
       listItem.style.textDecoration = 'line-through';
-      listItem.style.backgroundColor = "green";
+      taskDiv.style.backgroundColor = "rgb(7 104 11 / 44%)";
     }
-    createCrossAndCheckBox(listItem);
-    createEditButton(listItem);
-    listContainer.append(listItem);
-  })
+    // Create a div for buttons
+    const buttonDiv = document.createElement("div");
+    buttonDiv.classList.add("button-div");
+
+    // Append li and button div to task div
+    taskDiv.appendChild(listItem);
+    taskDiv.appendChild(buttonDiv);
+
+    // Append task div to list container
+    listContainer.appendChild(taskDiv);
+
+    // Create buttons and append them to button div
+    createEditButton(buttonDiv, taskDiv, listItem);
+    createCheckButton(buttonDiv, listItem);
+    createDeleteButton(buttonDiv, listItem);
+  });
 }
 
-function createCrossAndCheckBox(listItem){
-  const cross = document.createElement("span");
-  cross.innerHTML = "\u00d7";
-  cross.className = "close";
-  listItem.append(cross);
-
-  const checkBox = document.createElement("input");
-  checkBox.className = "checked";
-  checkBox.type = "checkbox";
-  listItem.append(checkBox);
-
-  if(listItem.style.textDecoration === 'line-through'){
-    checkBox.checked = true;
-  }
-
-  cross.addEventListener("click",removeTask);
-  function removeTask(){
-    const id = listItem.dataset.id;
-    deleteTask(id);
-  }
-
-  checkBox.addEventListener("change",checkedOrUnchecked);
-  async function checkedOrUnchecked(event){ 
-    const id = listItem.dataset.id;
-    const status = event.target.checked ? "1" : "0";
-    try{
-      await updateTaskStatus(id,status);
-    }
-    catch(error){
-      console.error("error updating task status:", error);
-    }
-  }
-}
-
-function createEditButton(listItem) {
-  const editButton = document.createElement("span");
+function createEditButton(buttonDiv, taskDiv, listItem) {
+  const editButton = document.createElement("button");
   editButton.innerHTML = "&#9998;";
   editButton.className = "edit";
-  listItem.append(editButton);
+  buttonDiv.appendChild(editButton);
 
   editButton.addEventListener("click", () => {
     const editInput = document.createElement("input");
     editInput.type = "text";
     editInput.className = "edit-input";
-    editInput.value = listItem.textContent.substring(0,(listItem.textContent.length)-2);
+    editInput.value = listItem.textContent;
     
     listItem.textContent = "";
-    listItem.append(editInput);
+    listItem.appendChild(editInput);
     editInput.focus();
 
     editInput.addEventListener("keypress", (e) => {
@@ -104,6 +87,34 @@ function createEditButton(listItem) {
   });
 }
 
+function createCheckButton(buttonDiv, listItem) {
+  const checkButton = document.createElement("input");
+  checkButton.type = "checkbox";
+  checkButton.className = "check";
+  buttonDiv.appendChild(checkButton);
+  if(listItem.style.textDecoration == 'line-through'){
+  checkButton.checked = true;
+  }
+
+  checkButton.addEventListener("click", () => {
+    const id = listItem.dataset.id;
+    const status = listItem.style.textDecoration === 'line-through' ? "0" : "1";
+    updateTaskStatus(id, status);
+  });
+}
+
+function createDeleteButton(buttonDiv, listItem) {
+  const deleteButton = document.createElement("button");
+  deleteButton.textContent = "\u00d7";
+  deleteButton.className = "delete";
+  buttonDiv.appendChild(deleteButton);
+
+  deleteButton.addEventListener("click", () => {
+    const id = listItem.dataset.id;
+    deleteTask(id);
+  });
+}
+
 async function updateTaskTitle(id, newTitle) {
   try {
     const response = await fetch('/api/v1/updatetask', {
@@ -123,8 +134,7 @@ async function updateTaskTitle(id, newTitle) {
   }
 }
 
-
-async function updateTaskStatus(id,status){
+async function updateTaskStatus(id, status){
   try{
     const response = await fetch('/api/v1/updatestatus',{
       method: 'PUT',
