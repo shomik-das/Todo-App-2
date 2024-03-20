@@ -146,7 +146,7 @@ body {
 
 @media screen and (max-width: 768px) {
   .container {
-    width: 92%; /* Adjust container width for smaller screens */
+    width: 90%; /* Adjust container width for smaller screens */
     padding: 20px;
   }
 
